@@ -12,7 +12,8 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Modelos
 {
     internal class Clientes
     {
-        [Key] 
+        [Key]
+        [MaxLength(4000)]
         public String? IdCliente { get; set; }
         public String? CedulaSerial { get; set; }
         public String? Nombres { get; set; }

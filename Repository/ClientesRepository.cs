@@ -27,7 +27,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
 
             try
             {
-                var id = clientes.IdCliente;
+                var id = encriptar.Encriptar(clientes.IdCliente);
                 var cedula = encriptar.Encriptar(clientes.CedulaSerial);
                 var nombres = encriptar.Encriptar(clientes.Nombres);
                 var direccion = encriptar.Encriptar(clientes.Direccion);
