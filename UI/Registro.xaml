@@ -1,0 +1,40 @@
+﻿<Window x:Class="PruebaTecnica_Cifrado_Homomorfico.UI.Registro"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PruebaTecnica_Cifrado_Homomorfico.UI"
+        mc:Ignorable="d"
+        Title="Registro de usuarios" Height="400" Width="350">
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="10">
+            <Label Content="Id"></Label>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="Id" Height="22" Width="100" Text="{Binding IdCliente}" ></TextBox>
+                <Button Content=" Buscar " x:Name="buscar" Margin="5,0,0,0" Click="buscar_Click"></Button>
+            </StackPanel>
+
+            <Label Content="Cedula"></Label>
+            <TextBox x:Name="cedula" Height="22" Text="{Binding CedulaSerial}"></TextBox>
+
+            <Label Content="Nombres"></Label>
+            <TextBox x:Name="Nombres" Height="22" Text="{Binding Nombres}"></TextBox>
+
+            <Label Content="Dirreccion"></Label>
+            <TextBox x:Name="Direecion" Height="22" Text="{Binding Direccion}"></TextBox>
+
+            <Label Content="Telefono"></Label>
+            <TextBox x:Name="Telefono" Height="22" Text="{Binding Telefono}"></TextBox>
+
+            <Label Content="Limite de credito"></Label>
+            <TextBox x:Name="Limite" Height="22" Text="{Binding LimiteCredito}"></TextBox>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Button Content="Limpiar" Height="22" Width="80" x:Name="limpiar" Click="limpiar_Click"></Button>
+                <Button Content="Guardar" Margin="10,0,0,0" Height="22" Width="80" x:Name="guardar" Click="guardar_Click"></Button>
+                <Button Content="Eliminar" Margin="10,0,0,0" Height="22" Width="80" x:Name="eliminar" Click="eliminar_Click"></Button>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
