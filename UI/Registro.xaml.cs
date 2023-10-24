@@ -33,7 +33,18 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
         private void buscar_Click(object sender, RoutedEventArgs e)
         {
 
-            Console.WriteLine("debugger");
+            var cliente = ClientesRepository.buscar();
+
+            if (cliente != null)
+            {
+                this.clientes = cliente;
+            }
+            else
+            {
+                this.clientes = new Clientes();
+            }
+
+            this.DataContext = clientes;
 
         }
 

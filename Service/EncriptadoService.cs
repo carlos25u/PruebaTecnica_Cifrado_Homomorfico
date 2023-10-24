@@ -24,9 +24,13 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
         public EncriptadoService()
         {
             // Configurar los parámetros del cifrado homomórfico
+            //define los parámetros del esquema de cifrado que se utilizará
             parms = new EncryptionParameters(SchemeType.BFV);
+            // Establece el grado del polinomio modular.
             parms.PolyModulusDegree = 4096;
+            //Define cómo los números son representados y manejados en el esquema.
             parms.CoeffModulus = CoeffModulus.BFVDefault(4096);
+            // se utiliza para limitar el tamaño de los números que pueden ser cifrados.
             parms.PlainModulus = PlainModulus.Batching(4096, 20);
 
             context = new SEALContext(parms);
@@ -39,6 +43,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
             encryptor = new Encryptor(context, publicKey);
             decryptor = new Decryptor(context, secretKey);
 
+            //se utiliza para crear un objeto de codificación 
             encoder = new IntegerEncoder(context);
 
         }
@@ -91,14 +96,24 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
 
                     decryptor.Decrypt(cipherText, plainText);
 
-                    return plainText.ToString();
+                    long valorNumerico = encoder.DecodeInt64(plainText);
+                    byte[] bytes = BitConverter.GetBytes(valorNumerico);
+
+                    // Los datos desencriptados pueden tener bytes nulos (0x00) al final debido al relleno.
+                    int nullTerminatorIndex = Array.IndexOf(bytes, (byte)0);
+                    if (nullTerminatorIndex >= 0)
+                    {
+                        bytes = bytes.Take(nullTerminatorIndex).ToArray();
+                    }
+
+                    return Encoding.UTF8.GetString(bytes);
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error al desencriptar texto: {e.ToString()}");
-                return ciphertext;
+                return ciphertext; 
             }
-        } 
+        }
     }
 }

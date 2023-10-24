@@ -13,7 +13,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
 {
     internal class ClientesRepository
     {
-        private EncriptadoService encriptar;
+        private readonly EncriptadoService encriptar;
 
         public ClientesRepository()
         {
@@ -47,6 +47,9 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
                 contexto.Clientes.Add(clientesGuardar);
                 paso = contexto.SaveChanges() > 0;
 
+                MessageBox.Show($"{encriptar.Desencriptar(id)}\n{encriptar.Desencriptar(cedula)}\n"+
+                    $"{encriptar.Desencriptar(nombres)}\n{encriptar.Desencriptar(direccion)}\n"+
+                    $"{encriptar.Desencriptar(telefono)}\n{encriptar.Desencriptar(limite)}", "Entidad descriptada");
             }
             catch (Exception ex)
             {
@@ -63,11 +66,10 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
         public List<Clientes> GetClientes()
         {
             var contexto = new Contexto();
-            var listaOriginal = new List<Clientes>();
 
             try
             {
-                listaOriginal = contexto.Clientes.ToList();
+                var listaOriginal = contexto.Clientes.ToList();
 
                 var listaDesencriptada = new List<Clientes>();
 
@@ -75,12 +77,12 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
                 {
                     var clienteDesencriptado = new Clientes
                     {
-                        IdCliente = cliente.IdCliente,
+                        IdCliente = encriptar.Desencriptar(cliente.IdCliente),
                         CedulaSerial = encriptar.Desencriptar(cliente.CedulaSerial),
                         Nombres = encriptar.Desencriptar(cliente.Nombres),
                         Direccion = encriptar.Desencriptar(cliente.Direccion),
                         Telefono = encriptar.Desencriptar(cliente.Telefono),
-                        LimiteCredito = cliente.LimiteCredito
+                        LimiteCredito = encriptar.Desencriptar(cliente.LimiteCredito),
                     };
 
                     listaDesencriptada.Add(clienteDesencriptado);
@@ -96,6 +98,26 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
             {
                 contexto.Dispose();
             }
+        }
+
+        public static Clientes buscar()
+        {
+            Contexto contexto = new Contexto();
+            var cliente = new Clientes();
+            try
+            {
+                 cliente = contexto.Clientes.First();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                contexto.Dispose();
+            }
+
+            return cliente;
         }
     }
 }

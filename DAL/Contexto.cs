@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PruebaTecnica_Cifrado_Homomorfico.DAL
 {
-    internal class Contexto: DbContext
+    internal class Contexto: DbContext 
     {
         public DbSet<Clientes> Clientes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

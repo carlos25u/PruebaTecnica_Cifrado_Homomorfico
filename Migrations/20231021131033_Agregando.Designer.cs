@@ -11,7 +11,7 @@ using PruebaTecnica_Cifrado_Homomorfico.DAL;
 namespace PruebaTecnica_Cifrado_Homomorfico.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231021131405_Agregando")]
+    [Migration("20231021131033_Agregando")]
     partial class Agregando
     {
         /// <inheritdoc />
@@ -26,13 +26,13 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Migrations
 
             modelBuilder.Entity("PruebaTecnica_Cifrado_Homomorfico.Modelos.Clientes", b =>
                 {
-                    b.Property<string>("IdCliente")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CedulaSerial")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdCliente")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LimiteCredito")
@@ -43,8 +43,6 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Migrations
 
                     b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdCliente");
 
                     b.ToTable("Clientes");
                 });
