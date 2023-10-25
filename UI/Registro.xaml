@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PruebaTecnica_Cifrado_Homomorfico.UI"
         mc:Ignorable="d"
-        Title="Registro de usuarios" Height="400" Width="350">
+        Title="Registro de clientes" Height="400" Width="350" Icon="/Resource/LOGO.png">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="10">
             <Label Content="Id"></Label>

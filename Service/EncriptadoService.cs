@@ -20,6 +20,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
         private SEALContext context;
         private EncryptionParameters parms;
         private IntegerEncoder encoder;
+        private static object instance;
 
         public EncriptadoService()
         {
@@ -40,12 +41,22 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
             secretKey = keyGenerator.SecretKey;
             publicKey = keyGenerator.PublicKey;
 
+
             encryptor = new Encryptor(context, publicKey);
             decryptor = new Decryptor(context, secretKey);
 
             //se utiliza para crear un objeto de codificación 
             encoder = new IntegerEncoder(context);
 
+        }
+
+        public static EncriptadoService GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new EncriptadoService();
+            }
+            return (EncriptadoService)instance;
         }
 
         public String Encriptar(String plaintext)

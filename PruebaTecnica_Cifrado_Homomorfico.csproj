@@ -9,6 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\LOGO.png" />
+    <None Remove="Resource\persona.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resource\LOGO.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\persona.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Interfacez\" />
   </ItemGroup>
 

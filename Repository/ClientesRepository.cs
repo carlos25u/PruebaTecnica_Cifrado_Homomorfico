@@ -17,7 +17,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
 
         public ClientesRepository()
         {
-            encriptar = new EncriptadoService();
+            encriptar = DependencyContainer.GetEncriptadoService();
         }
 
         public bool guardar(Clientes clientes)
@@ -46,10 +46,6 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
 
                 contexto.Clientes.Add(clientesGuardar);
                 paso = contexto.SaveChanges() > 0;
-
-                MessageBox.Show($"{encriptar.Desencriptar(id)}\n{encriptar.Desencriptar(cedula)}\n"+
-                    $"{encriptar.Desencriptar(nombres)}\n{encriptar.Desencriptar(direccion)}\n"+
-                    $"{encriptar.Desencriptar(telefono)}\n{encriptar.Desencriptar(limite)}", "Entidad descriptada");
             }
             catch (Exception ex)
             {
@@ -106,9 +102,10 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
             var cliente = new Clientes();
             try
             {
-                 cliente = contexto.Clientes.First();
+                cliente = contexto.Clientes.Find();
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
