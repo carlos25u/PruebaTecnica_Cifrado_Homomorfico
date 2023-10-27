@@ -32,8 +32,37 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
             var consulta = new ClientesRepository();
 
 
-            listado = consulta.GetClientes();
+            if (criterio.Text.Trim().Length > 0)
+            {
+                switch (FiltroComboBox.SelectedIndex)
+                {
+                    case 0:
+                        listado = consulta.GetListCriterio(e => e.IdCliente.ToLower().Contains(criterio.Text));
+                        break;
 
+                    case 1:
+                        listado = consulta.GetListCriterio(e => e.CedulaSerial.ToLower().Contains(criterio.Text));
+                        break;
+                    case 2:
+                        listado = consulta.GetListCriterio(e => e.Nombres.ToLower().Contains(criterio.Text));
+                        break;
+                    case 3:
+                        listado = consulta.GetListCriterio(e => e.Direccion.ToLower().Contains(criterio.Text));
+                        break;
+                    case 4:
+                        listado = consulta.GetListCriterio(e => e.Telefono.ToLower().Contains(criterio.Text));
+                        break;
+                    case 5:
+                        listado = consulta.GetListCriterio(e => e.LimiteCredito.ToLower().Contains(criterio.Text));
+                        break;
+                }
+            }
+            else
+            {
+                listado = consulta.GetClientes();
+            }
+
+            DatosDataGrid.ItemsSource = null;
             DatosDataGrid.ItemsSource = listado;
         }
     }

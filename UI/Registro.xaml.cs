@@ -32,8 +32,9 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
 
         private void buscar_Click(object sender, RoutedEventArgs e)
         {
+            var clienteBuscado = new ClientesRepository();
 
-            var cliente = ClientesRepository.buscar(Id.Text);
+            var cliente = clienteBuscado.buscar(Id.Text);
 
             if (cliente != null)
             {
@@ -42,6 +43,8 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
             else
             {
                 this.clientes = new Clientes();
+                MessageBox.Show("No encontrado", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             this.DataContext = clientes;
@@ -56,6 +59,9 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
         private void guardar_Click(object sender, RoutedEventArgs e)
         {
              ClientesRepository cliente = new ClientesRepository();
+
+            if (!validar())
+                return;
 
              var paso = cliente.guardar(clientes);
 
@@ -74,13 +80,54 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
 
         private void eliminar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(Environment.GetEnvironmentVariable("HOLA"));
+            var cliente = new ClientesRepository();
+
+            if (cliente.eliminar(Id.Text))
+            {
+                Limpiar();
+                MessageBox.Show("Registro Eliminado", "Exito",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("No fue posible Eliminar", "Fallo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Limpiar()
         {
             this.clientes = new Clientes();
             this.DataContext = clientes;
+        }
+
+        private bool validar()
+        {
+            String mensajeValidacion = "";
+
+            if (string.IsNullOrWhiteSpace(Id.Text))
+                mensajeValidacion = "El Id no puede estar vacio";
+
+            if (string.IsNullOrWhiteSpace(cedula.Text))
+                mensajeValidacion = "La Cedula no puede estar vacia";
+
+            if (string.IsNullOrWhiteSpace(Nombres.Text))
+                mensajeValidacion = "El Nombres no puede estar vacio";
+
+            if (string.IsNullOrWhiteSpace(Direecion.Text))
+                mensajeValidacion = "la Dirreccion no puede estar vacia";
+
+            if (string.IsNullOrWhiteSpace(Telefono.Text))
+                mensajeValidacion = "El Telefono no puede estar vacio";
+
+            if (string.IsNullOrWhiteSpace(Limite.Text))
+                mensajeValidacion = "El Limite de credito no puede estar vacio";
+
+            if (mensajeValidacion.Length > 0)
+                MessageBox.Show(mensajeValidacion, "Fallo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            
+
+            return mensajeValidacion.Length == 0;
         }
     }
 }

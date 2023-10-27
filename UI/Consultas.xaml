@@ -9,16 +9,34 @@
     <Grid>
         <StackPanel Orientation="Vertical" Margin="10">
 
-            <Button x:Name="buscar" Content=" Buscar " HorizontalAlignment="Left" Width="100" Height="30" Click="buscar_Click"></Button>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Filtro: "></Label>
+                
+                <ComboBox x:Name="FiltroComboBox" Height="22" Width="120">
+                    <ComboBoxItem Content="Id" ></ComboBoxItem>
+                    <ComboBoxItem Content="Cedula" ></ComboBoxItem>
+                    <ComboBoxItem Content="Nombres" ></ComboBoxItem>
+                    <ComboBoxItem Content="Direccion"></ComboBoxItem>
+                    <ComboBoxItem Content="Telefono"></ComboBoxItem>
+                    <ComboBoxItem Content="Limite de credito"></ComboBoxItem>
+                    
+                </ComboBox>
+
+                <Label Content="Criterio"></Label>
+                <TextBox x:Name="criterio" Width="150" Height="22"></TextBox>
+               
+               <Button x:Name="buscar" Margin="5,0,0,0" Content=" Buscar " HorizontalAlignment="Left" Width="100" Height="30" Click="buscar_Click"></Button>
+
+            </StackPanel>
 
             <StackPanel HorizontalAlignment="Left" Margin="0,5,0,0">
-                <DataGrid x:Name="DatosDataGrid" Height="300" AutoGenerateColumns="False">
+                <DataGrid x:Name="DatosDataGrid" Height="350" Width="760" AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="50" Header="Id" Binding="{Binding IdCliente}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="100" Header="Cedula" Binding="{Binding CedulaSerial}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="100" Header="Nombres" Binding="{Binding Nombres}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="100" Header="Direccion" Binding="{Binding Direccion}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="100" Header="Telefono" Binding="{Binding Telefono}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="100" Header="Id" Binding="{Binding IdCliente}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="120" Header="Cedula" Binding="{Binding CedulaSerial}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="120" Header="Nombres" Binding="{Binding Nombres}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="120" Header="Direccion" Binding="{Binding Direccion}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="120" Header="Telefono" Binding="{Binding Telefono}" IsReadOnly="True"/>
                         <DataGridTextColumn Width="100" Header="Limite de credito" Binding="{Binding LimiteCredito}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>

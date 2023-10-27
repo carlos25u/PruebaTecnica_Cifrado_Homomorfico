@@ -5,6 +5,7 @@ using PruebaTecnica_Cifrado_Homomorfico.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -96,13 +97,26 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
             }
         }
 
-        public static Clientes buscar(String id)
+        public Clientes buscar(String id)
         {
-            Contexto contexto = new Contexto();
+            var contexto = new Contexto();
             var cliente = new Clientes();
+            var clienteDecifrado = new Clientes();
+            var clientesCifrado = contexto.Clientes.ToList();
+
             try
             {
-                cliente = contexto.Clientes.Find(id);
+                cliente = clientesCifrado.FirstOrDefault(c => encriptar.Desencriptar(c.IdCliente) == id);
+
+                if (cliente != null)
+                {
+                    clienteDecifrado.IdCliente = encriptar.Desencriptar(cliente.IdCliente);
+                    clienteDecifrado.CedulaSerial = encriptar.Desencriptar(cliente.CedulaSerial);
+                    clienteDecifrado.Nombres = encriptar.Desencriptar(cliente.Nombres);
+                    clienteDecifrado.Direccion = encriptar.Desencriptar(cliente.Direccion);
+                    clienteDecifrado.Telefono = encriptar.Desencriptar(cliente.Telefono);
+                    clienteDecifrado.LimiteCredito = encriptar.Desencriptar(cliente.LimiteCredito);
+                }
 
             }
             catch (Exception)
@@ -114,7 +128,78 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
                 contexto.Dispose();
             }
 
-            return cliente;
+            return clienteDecifrado;
+        }
+
+        public bool eliminar(String id)
+        {
+            var contexto = new Contexto();
+            bool paso = false;
+            var cliente = new Clientes();
+            var clienteDecifrado = new Clientes();
+            var clientesCifrado = contexto.Clientes.ToList();
+
+            try
+            {
+                cliente = clientesCifrado.FirstOrDefault(c => encriptar.Desencriptar(c.IdCliente) == id);
+
+                if (cliente != null)
+                {
+                    contexto.Clientes.Remove(cliente);
+                    paso = contexto.SaveChanges() > 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                contexto.Dispose();
+            }
+
+            return paso;
+        }
+
+        public List<Clientes> GetListCriterio(Expression<Func<Clientes, bool>> criterio)
+        {
+            var listaDecencriptrada = new List<Clientes>();
+            Contexto contexto = new Contexto();
+            try
+            {
+                // Recupera la lista cifrada de la base de datos
+                var listaCifrada = contexto.Clientes.ToList();
+
+                // Itera sobre cada elemento cifrado y desencripta los valores relevantes
+                foreach (var clienteCifrado in listaCifrada)
+                {
+                    var clienteDesencriptado = new Clientes
+                    {
+                        IdCliente = encriptar.Desencriptar(clienteCifrado.IdCliente),
+                        CedulaSerial = encriptar.Desencriptar(clienteCifrado.CedulaSerial),
+                        Nombres = encriptar.Desencriptar(clienteCifrado.Nombres),
+                        Direccion = encriptar.Desencriptar(clienteCifrado.Direccion),
+                        Telefono = encriptar.Desencriptar(clienteCifrado.Telefono),
+                        LimiteCredito = encriptar.Desencriptar(clienteCifrado.LimiteCredito),
+                    };
+
+                    // Aplica el criterio a los datos desencriptados
+                    if (criterio.Compile().Invoke(clienteDesencriptado))
+                    {
+                        listaDecencriptrada.Add(clienteDesencriptado);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                contexto.Dispose();
+            }
+            return listaDecencriptrada;
         }
     }
 }
