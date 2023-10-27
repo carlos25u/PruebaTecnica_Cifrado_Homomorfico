@@ -33,7 +33,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
         private void buscar_Click(object sender, RoutedEventArgs e)
         {
 
-            var cliente = ClientesRepository.buscar();
+            var cliente = ClientesRepository.buscar(Id.Text);
 
             if (cliente != null)
             {
@@ -74,7 +74,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.UI
 
         private void eliminar_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show(Environment.GetEnvironmentVariable("HOLA"));
         }
 
         private void Limpiar()

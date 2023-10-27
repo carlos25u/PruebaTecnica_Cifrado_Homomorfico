@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DotNetEnv;
 
 namespace PruebaTecnica_Cifrado_Homomorfico.Service
 {
@@ -21,35 +22,101 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
         private EncryptionParameters parms;
         private IntegerEncoder encoder;
         private static object instance;
-
         public EncriptadoService()
         {
             // Configurar los parámetros del cifrado homomórfico
-            //define los parámetros del esquema de cifrado que se utilizará
             parms = new EncryptionParameters(SchemeType.BFV);
-            // Establece el grado del polinomio modular.
             parms.PolyModulusDegree = 4096;
-            //Define cómo los números son representados y manejados en el esquema.
             parms.CoeffModulus = CoeffModulus.BFVDefault(4096);
-            // se utiliza para limitar el tamaño de los números que pueden ser cifrados.
             parms.PlainModulus = PlainModulus.Batching(4096, 20);
 
             context = new SEALContext(parms);
 
-            // Generar claves pública y privada
-            keyGenerator = new KeyGenerator(context);
-            secretKey = keyGenerator.SecretKey;
-            publicKey = keyGenerator.PublicKey;
+            DotNetEnv.Env.Load();
 
+            // Comprobar si las claves ya están en las variables de entorno
+            string publicKeyString = Environment.GetEnvironmentVariable("PUBLIC_KEY");
+            string secretKeyString = Environment.GetEnvironmentVariable("SECRET_KEY");
 
-            encryptor = new Encryptor(context, publicKey);
-            decryptor = new Decryptor(context, secretKey);
+            if (!string.IsNullOrEmpty(publicKeyString) && !string.IsNullOrEmpty(secretKeyString))
+            {
+                publicKey = LoadPublicKeyFromString(publicKeyString);
+                secretKey = LoadSecretKeyFromString(secretKeyString);
 
-            //se utiliza para crear un objeto de codificación 
+                // Ahora, puedes usar publicKey y secretKey para configurar el cifrado
+                SetupCifrado(publicKey, secretKey);
+            }
+            else
+            {
+                // Si las claves no existen en las variables de entorno, genera y guarda nuevas claves
+                GenerarYGuardarClaves();
+            }
             encoder = new IntegerEncoder(context);
-
         }
 
+        public void GenerarYGuardarClaves()
+        {
+            keyGenerator = new KeyGenerator(context);
+
+            publicKey = keyGenerator.PublicKey;
+            secretKey = keyGenerator.SecretKey;
+
+            // Convertir las claves en cadenas Base64
+            string publicKeyString = PublicKeyToString(publicKey);
+            string secretKeyString = SecretKeyToString(secretKey);
+
+            // Guardar las cadenas en las variables de entorno
+            Environment.SetEnvironmentVariable("PUBLIC_KEY", publicKeyString);
+            Environment.SetEnvironmentVariable("SECRET_KEY", secretKeyString);
+
+            SetupCifrado(publicKey, secretKey);
+        }
+
+        private void SetupCifrado(PublicKey publicKey, SecretKey secretKey)
+        {
+            encryptor = new Encryptor(context, publicKey);
+            decryptor = new Decryptor(context, secretKey);
+        }
+
+        private string PublicKeyToString(PublicKey publicKey)
+        {
+            using (MemoryStream publicKeyStream = new MemoryStream())
+            {
+                publicKey.Save(publicKeyStream);
+                return Convert.ToBase64String(publicKeyStream.ToArray());
+            }
+        }
+
+        private PublicKey LoadPublicKeyFromString(string publicKeyString)
+        {
+            byte[] publicKeyBytes = Convert.FromBase64String(publicKeyString);
+            using (MemoryStream publicKeyStream = new MemoryStream(publicKeyBytes))
+            {
+                PublicKey publicKey = new PublicKey();
+                publicKey.Load(context, publicKeyStream);
+                return publicKey;
+            }
+        }
+
+        private string SecretKeyToString(SecretKey secretKey)
+        {
+            using (MemoryStream secretKeyStream = new MemoryStream())
+            {
+                secretKey.Save(secretKeyStream);
+                return Convert.ToBase64String(secretKeyStream.ToArray());
+            }
+        }
+
+        private SecretKey LoadSecretKeyFromString(string secretKeyString)
+        {
+            byte[] secretKeyBytes = Convert.FromBase64String(secretKeyString);
+            using (MemoryStream secretKeyStream = new MemoryStream(secretKeyBytes))
+            {
+                SecretKey secretKey = new SecretKey();
+                secretKey.Load(context, secretKeyStream);
+                return secretKey;
+            }
+        }
         public static EncriptadoService GetInstance()
         {
             if (instance == null)
@@ -58,7 +125,6 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
             }
             return (EncriptadoService)instance;
         }
-
         public String Encriptar(String plaintext)
         {
             try
@@ -123,7 +189,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Service
             catch (Exception e)
             {
                 Console.WriteLine($"Error al desencriptar texto: {e.ToString()}");
-                return ciphertext; 
+                return ciphertext;
             }
         }
     }

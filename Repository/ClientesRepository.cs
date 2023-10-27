@@ -17,7 +17,7 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
 
         public ClientesRepository()
         {
-            encriptar = DependencyContainer.GetEncriptadoService();
+            encriptar = DependencyContainer.GetEncriptadoService(); ;
         }
 
         public bool guardar(Clientes clientes)
@@ -96,13 +96,13 @@ namespace PruebaTecnica_Cifrado_Homomorfico.Repository
             }
         }
 
-        public static Clientes buscar()
+        public static Clientes buscar(String id)
         {
             Contexto contexto = new Contexto();
             var cliente = new Clientes();
             try
             {
-                cliente = contexto.Clientes.Find();
+                cliente = contexto.Clientes.Find(id);
 
             }
             catch (Exception)
