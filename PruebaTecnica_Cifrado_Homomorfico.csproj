@@ -10,7 +10,12 @@
 
   <ItemGroup>
     <None Remove=".env" />
+    <None Remove="Resource\buscar.png" />
+    <None Remove="Resource\Eliminar.png" />
+    <None Remove="Resource\Guardar.png" />
+    <None Remove="Resource\Listo.png" />
     <None Remove="Resource\LOGO.png" />
+    <None Remove="Resource\Nuevo.png" />
     <None Remove="Resource\persona.png" />
   </ItemGroup>
 
@@ -18,7 +23,22 @@
     <Content Include=".env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\buscar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Eliminar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Guardar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Listo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\LOGO.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Nuevo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\persona.png">

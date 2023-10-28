@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PruebaTecnica_Cifrado_Homomorfico.UI"
         mc:Ignorable="d"
-        Title="Consultas de clientes" Height="450" Width="800" Icon="/Resource/LOGO.png">
+        Title="Consultas de clientes" Height="460" Width="800" Icon="/Resource/LOGO.png">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="10">
 
             <StackPanel Orientation="Horizontal">
-                <Label Content="Filtro: "></Label>
+                <Label Content="Filtro: " Margin="0,5,0,0"></Label>
                 
                 <ComboBox x:Name="FiltroComboBox" Height="22" Width="120">
                     <ComboBoxItem Content="Id" ></ComboBoxItem>
@@ -22,10 +22,13 @@
                     
                 </ComboBox>
 
-                <Label Content="Criterio"></Label>
+                <Label Content="Criterio" Margin="0,5,0,0"></Label>
                 <TextBox x:Name="criterio" Width="150" Height="22"></TextBox>
-               
-               <Button x:Name="buscar" Margin="5,0,0,0" Content=" Buscar " HorizontalAlignment="Left" Width="100" Height="30" Click="buscar_Click"></Button>
+
+                <Button x:Name="buscar" Margin="5,0,0,0" BorderBrush="Transparent" Background="Transparent"
+                       HorizontalAlignment="Left" Width="50" Height="40" Click="buscar_Click">
+                    <Image Source="/Resource/Listo.png"></Image>
+               </Button>
 
             </StackPanel>
 
